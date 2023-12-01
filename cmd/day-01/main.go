@@ -17,7 +17,7 @@ func isDigit(r rune) bool {
 
 func Part1(reader io.Reader) (int, error) {
 	scanner := bufio.NewScanner(reader)
-	values := make([]int, 0)
+	sum := 0
 
 	for scanner.Scan() {
 		buf := bytes.NewBuffer(scanner.Bytes())
@@ -30,7 +30,7 @@ func Part1(reader io.Reader) (int, error) {
 		for {
 			r, _, err := buf.ReadRune()
 			if err != nil {
-				// EOF (or end of line - wrap this up and return the parsed number)
+				// EOF (or end of line - wrap this up and add to the sum)
 				if errors.Is(err, io.EOF) {
 					out := &strings.Builder{}
 					if left != nil {
@@ -48,7 +48,7 @@ func Part1(reader io.Reader) (int, error) {
 						return 0, err
 					}
 
-					values = append(values, value)
+					sum += value
 
 					break
 				}
@@ -64,11 +64,6 @@ func Part1(reader io.Reader) (int, error) {
 				right = &r
 			}
 		}
-	}
-
-	sum := 0
-	for _, value := range values {
-		sum += value
 	}
 
 	return sum, nil
